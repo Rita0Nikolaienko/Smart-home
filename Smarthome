@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Automation Control</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 90%;
+            max-width: 800px;
+            margin: 2em auto;
+            padding: 2em;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        button {
+            display: block;
+            width: 100%;
+            margin: 0.5em 0;
+            padding: 0.8em;
+            font-size: 1em;
+            color: #fff;
+            background: #007BFF;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .response {
+            margin-top: 1em;
+            font-weight: bold;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Home Automation Control</h1>
+
+        <button onclick="sendCommand('list_music')">List Music</button>
+        <button onclick="sendCommand('play_music')">Play Music</button>
+        <button onclick="sendCommand('stop_music')">Stop Music</button>
+
+        <button onclick="sendCommand('open_door')">Open Door</button>
+        <button onclick="sendCommand('close_door')">Close Door</button>
+
+        <button onclick="sendCommand('mute_volume')">Mute Volume</button>
+        <button onclick="sendCommand('unmute_volume')">Unmute Volume</button>
+
+        <button onclick="sendCommand('get_weather')">Get Weather</button>
+        <button onclick="sendCommand('tell_joke')">Tell a Joke</button>
+        <button onclick="sendCommand('fun_fact')">Tell a Fun Fact</button>
+
+        <div class="response" id="response">Awaiting command...</div>
+    </div>
+
+    <script>
+        function sendCommand(command) {
+            fetch('http://localhost:5000/command', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ command })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('response').innerText = data.message;
+            })
+            .catch(error => {
+                document.getElementById('response').innerText = "Error: " + error;
+            });
+        }
+    </script>
+</body>
+</html>
